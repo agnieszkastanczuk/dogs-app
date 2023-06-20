@@ -38,7 +38,7 @@ const DogList = () => {
     const [dogImage, setDogImage] = useState('');
     const fetchDogImage = async (breed: string) => {
         try {
-            const response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random`);
+            const response = await axios.get(`${api}/breed/${breed}/images/random`);
             setDogImage(response.data.message);
         } catch (error) {
             console.error(error);
