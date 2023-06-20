@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '@env'
 
@@ -29,10 +29,29 @@ const DogList = () => {
             if (breeds.length === 0) {
                 setIsLoading(false);
             }
+            return breeds;
         } catch (error) {
             console.error(error);
         }
     };
+
+    const [dogImage, setDogImage] = useState('');
+    const fetchDogImage = async (breed: string) => {
+        try {
+            const response = await axios.get(`https://dog.ceo/api/breed/${breed}/images/random`);
+            setDogImage(response.data.message);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+    const onPress = (breed: string) => {
+        setDogImage('');
+        fetchDogImage(breed);
+        console.log(breed)
+    };
+
 
     const loadMoreBreeds = () => {
         const nextPage = page + 1;
@@ -47,9 +66,9 @@ const DogList = () => {
     };
 
     const renderBreeds = ({ item }: { item: string }) => (
-        <View style={styles.breedItem}>
+        <TouchableOpacity style={styles.breedItem} onPress={() => onPress(item)}>
             <Text>{item}</Text>
-        </View>
+        </TouchableOpacity>
     );
 
     const renderFooter = () => {
@@ -81,6 +100,9 @@ const DogList = () => {
                 //onEndReached={loadMoreBreeds}
                 ListFooterComponent={renderFooter}
             />
+            <Text style={styles.dogImageText}>To see a sample photo of the breed click on the name:
+            </Text>
+            <Image source={{ uri: dogImage }} style={styles.dogImage} />
         </View>
     );
 };
@@ -105,6 +127,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
     },
+    dogImageText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    dogImage: {
+        width: 200,
+        height: 200,
+        marginBottom: 10,
+    }
 });
 
 export default DogList;
