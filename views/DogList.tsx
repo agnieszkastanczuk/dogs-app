@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import axios from 'axios';
+import { API_URL } from '@env'
 
 interface DogListProps {
     item: string;
 }
+
+const api = process.env.API_URL;
 
 const DogList = () => {
     const [dogBreeds, setDogBreeds] = useState<string[]>([]);
@@ -20,7 +23,7 @@ const DogList = () => {
     const fetchDogBreeds = async (currentPage: number) => {
         setIsLoading(true);
         try {
-            const response = await axios.get('https://dog.ceo/api/breeds/list/all');
+            const response = await axios.get(`${api}/breeds/list/all`);
             breeds = Object.keys(response.data.message).slice(0, currentPage * 10);
             setDogBreeds(breeds);
             if (breeds.length === 0) {
@@ -66,7 +69,8 @@ const DogList = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Breeds list:</Text>
+            <Text style={styles.heading}>Breeds list:
+            </Text>
             <FlatList
                 style={styles.breedList}
                 data={dogBreeds}
