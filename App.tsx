@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DogList from './views/DogList';
+import DogSearch from './views/DogSearch';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <DogList />
+      <DogSearch />
     </View>
   );
 }
