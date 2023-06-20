@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     breedList: {
-        height: 500,
+        height: 400,
     },
     breedItem: {
         marginBottom: 16,
