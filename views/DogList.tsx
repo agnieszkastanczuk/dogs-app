@@ -36,22 +36,23 @@ const DogList = () => {
     };
 
     const [dogImage, setDogImage] = useState('');
+    const [loadingImage, setLoadingImage] = useState(false);
     const fetchDogImage = async (breed: string) => {
         try {
+            setLoadingImage(true);
             const response = await axios.get(`${api}/breed/${breed}/images/random`);
             setDogImage(response.data.message);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoadingImage(false);
         }
     };
-
 
     const onPress = (breed: string) => {
         setDogImage('');
         fetchDogImage(breed);
-        console.log(breed)
     };
-
 
     const loadMoreBreeds = () => {
         const nextPage = page + 1;
@@ -102,7 +103,13 @@ const DogList = () => {
             />
             <Text style={styles.dogImageText}>To see a sample photo of the breed click on the name:
             </Text>
-            <Image source={{ uri: dogImage }} style={styles.dogImage} />
+            {loadingImage ? (
+                <View style={styles.loader}>
+                    <ActivityIndicator size="large" color="blue" />
+                </View>
+            ) : (
+                <Image source={{ uri: dogImage }} style={styles.dogImage} />
+            )}
         </View>
     );
 };
@@ -135,7 +142,10 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         marginBottom: 10,
-    }
+    },
+    loader: {
+        marginTop: 20,
+    },
 });
 
 export default DogList;

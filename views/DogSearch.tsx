@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Button, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '@env'
 
@@ -10,9 +10,11 @@ const DogSearch = () => {
     const [breed, setBreed] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const searchDogImage = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${api}/breed/${breed}/images/random`);
             const { data } = response;
             const imageUrl = data.message;
@@ -21,6 +23,8 @@ const DogSearch = () => {
         } catch (error) {
             setImageUrl('');
             setError('There is no such breed of dog');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -34,7 +38,9 @@ const DogSearch = () => {
                 placeholder="Write the breed of dog"
             />
             <Button title="Search" onPress={searchDogImage} />
-            {imageUrl ? (
+            {loading ? (
+                <ActivityIndicator style={styles.loader} size="large" color="blue" />
+            ) : imageUrl ? (
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={{ uri: imageUrl }} />
                 </View>
@@ -76,6 +82,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         fontSize: 18,
         color: 'red',
+    },
+    loader: {
+        marginTop: 20,
     },
 });
 
