@@ -2,14 +2,18 @@ import React from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DogList from './views/DogList';
+// import DogList from './views/DogList';
 import DogSearch from './views/DogSearch';
+import DogListWithRQ from './views/DogListWithRQ';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+
+const queryClient = new QueryClient()
 
 const DogListScreen = () => {
   return (
     <View style={styles.container}>
-      <DogList />
+      <DogListWithRQ />
     </View>
   );
 };
@@ -26,12 +30,15 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="DogList" component={DogListScreen} />
-        <Tab.Screen name="DogSearch" component={DogSearchScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      {/* <NavigationContainer> */}
+      {/* <Tab.Navigator> */}
+      {/* <Tab.Screen name="DogList" component={DogListScreen} />
+        <Tab.Screen name="DogSearch" component={DogSearchScreen} /> */}
+      {/* </Tab.Navigator> */}
+      {/* </NavigationContainer> */}
+      <DogListWithRQ />
+    </QueryClientProvider>
   );
 }
 
